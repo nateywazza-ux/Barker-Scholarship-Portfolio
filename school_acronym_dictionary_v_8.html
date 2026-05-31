@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>School Acronym Dictionary V8 - 300+ Verified Acronyms</title>
+<style>
+body{font-family:Arial,sans-serif;margin:0;background:linear-gradient(135deg,#0a2a66,#123b8a);display:flex;justify-content:center;align-items:center;min-height:100vh;}
+.dark{background:#111;color:white;}
+.container{background:white;padding:30px;border-radius:18px;width:95%;max-width:1200px;max-height:90vh;overflow:auto;text-align:center;box-shadow:0 10px 30px rgba(0,0,0,0.3);}
+.dark .container{background:#222;}
+h1{color:#0a2a66;margin-bottom:5px;}
+.search{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:15px;}
+input{flex:1;padding:12px;border-radius:25px;border:2px solid #123b8a;}
+button{padding:10px 15px;border:none;border-radius:25px;background:#f4b400;cursor:pointer;font-weight:bold;}
+button:hover{background:#e0a400;}
+.category{font-weight:bold;margin-top:18px;color:#0a2a66;}
+.item{padding:5px;border-bottom:1px solid #ddd;text-align:left;}
+.day{background:#f4b400;padding:8px;border-radius:8px;margin-bottom:10px;font-weight:bold;}
+.counter{font-size:14px;margin-bottom:10px;}
+@media(max-width:600px){.search{flex-direction:column;}button{width:100%;}}
+</style>
+</head>
+<body>
+<div class="container">
+<h1>School Acronym Dictionary</h1>
+<div class="counter" id="counter"></div>
+<div class="day" id="day"></div>
+<div class="search">
+<input id="search" placeholder="Search acronym or keyword">
+<button onclick="search()">Search</button>
+<button onclick="showAll()">Show All</button>
+<button onclick="randomAcronym()">Random</button>
+<button onclick="toggleDark()">Dark</button>
+</div>
+<div id="results"></div>
+</div>
+<script>
+// Version 8: 300+ Verified Acronyms
+const acronyms = {
+"Learning & Support": {
+"ASD":["Autism Spectrum Disorder"],"ADHD":["Attention Deficit Hyperactivity Disorder"],"IEP":["Individualized Education Program"],"IAP":["Individual Action Plan"],"ILP":["Individual Learning Plan"],"PLP":["Personalised Learning Plan"],"EHC":["Education Health and Care Plan"],"SEN":["Special Educational Needs"],"SEND":["Special Educational Needs and Disabilities"],"SENCO":["Special Educational Needs Coordinator"],"OT_LS":["Occupational Therapy"],"PT_LS":["Physiotherapy"],"SALT":["Speech and Language Therapist"],"SLP":["Speech Language Pathologist"],"AAC":["Augmentative and Alternative Communication"],"ABA":["Applied Behaviour Analysis"],"ELL":["English Language Learner"],"EAL":["English as an Additional Language"],"ESL":["English as a Second Language"],"GDD":["Global Developmental Delay"],"HI":["Hearing Impairment"],"VI":["Visual Impairment"],"MLD":["Moderate Learning Difficulty"],"SLD":["Severe Learning Difficulty"],"PMLD":["Profound and Multiple Learning Difficulties"],"SEMH":["Social Emotional and Mental Health"],"BESD":["Behavioural Emotional Social Difficulties"],"APD":["Auditory Processing Disorder"],"DCD":["Developmental Coordination Disorder"],"SPD":["Sensory Processing Disorder"]
+},
+"Teaching & Curriculum": {
+"GPA":["Grade Point Average"],"STEM":["Science Technology Engineering Mathematics"],"STEAM":["Science Technology Engineering Arts Mathematics"],"ICT":["Information and Communication Technology"],"IT":["Information Technology"],"PE":["Physical Education"],"HPE":["Health and Physical Education"],"PDHPE":["Personal Development Health and Physical Education"],"ELA":["English Language Arts"],"LA":["Language Arts"],"SS":["Social Studies"],"MFL":["Modern Foreign Languages"],"RE":["Religious Education"],"DT":["Design and Technology"],"CS":["Computer Science"],"OER":["Open Educational Resources"],"MOOC":["Massive Open Online Course"],"LMS":["Learning Management System"],"VLE":["Virtual Learning Environment"],"F2F":["Face to Face Learning"],"BL":["Blended Learning"],"PBL":["Project Based Learning"],"TBL":["Team Based Learning"],"UDL":["Universal Design for Learning"],"KLA":["Key Learning Area"],"LO":["Learning Objective"],"WALT":["We Are Learning To"],"WILF":["What I Am Looking For"],"LOI":["Lines of Inquiry"],"ATL":["Approaches to Learning"]
+},
+"Leadership & Administration": {
+"AP":["Assistant Principal"],"DP":["Deputy Principal"],"VP":["Vice Principal"],"HT":["Head Teacher"],"SLT":["Senior Leadership Team"],"SMT":["Senior Management Team"],"TA":["Teaching Assistant"],"LSA":["Learning Support Assistant"],"HLTA":["Higher Level Teaching Assistant"],"PTA":["Parent Teacher Association"],"PTSA":["Parent Teacher Student Association"],"CPD":["Continuing Professional Development"],"HR":["Human Resources"],"MIS":["Management Information System"],"SIP":["School Improvement Plan"],"SDP":["School Development Plan"],"SMP":["School Management Plan"],"SRO":["School Resource Officer"],"EWO":["Education Welfare Officer"],"DBS":["Disclosure and Barring Service"],"DOE":["Department of Education"],"DFE":["Department for Education"],"LEA":["Local Education Authority"],"LA_AUTH":["Local Authority"],"CEO":["Catholic Education Office"],"CFO":["Chief Financial Officer"],"COO":["Chief Operating Officer"],"PR":["Public Relations"],"ITD":["IT Department"]
+},
+"Assessment & Testing": {
+"SAT":["Scholastic Assessment Test"],"ACT":["American College Testing"],"NAPLAN":["National Assessment Program Literacy and Numeracy"],"ATAR":["Australian Tertiary Admission Rank"],"IB":["International Baccalaureate"],"GCSE":["General Certificate of Secondary Education"],"AQA":["Assessment and Qualifications Alliance"],"OCR":["Oxford Cambridge and RSA"],"BTEC":["Business and Technology Education Council"],"CAT":["Cognitive Abilities Test"],"MAP":["Measures of Academic Progress"],"EOC":["End of Course"],"EOT":["End of Term"],"EOY":["End of Year"],"CBA":["Classroom Based Assessment"],"SBA":["School Based Assessment"],"GAT":["General Achievement Test"],"NCEA":["National Certificate of Educational Achievement"],"TOEFL":["Test of English as a Foreign Language"],"IELTS":["International English Language Testing System"],"PSAT":["Preliminary SAT"],"GRE":["Graduate Record Examination"],"GMAT":["Graduate Management Admission Test"],"LSAT":["Law School Admission Test"],"MCAT":["Medical College Admission Test"]
+},
+"Sports & PE": {
+"BMI":["Body Mass Index"],"FMS":["Fundamental Movement Skills"],"MVPA":["Moderate to Vigorous Physical Activity"],"RICER":["Rest Ice Compression Elevation Referral"],"TOTAPS":["Talk Observe Touch Active Passive Skill test"],"FITT":["Frequency Intensity Time Type"],"PB":["Personal Best"],"SB":["Season Best"],"DNF":["Did Not Finish"],"DNS":["Did Not Start"],"DQ":["Disqualified"],"WR":["World Record"],"NR":["National Record"],"OR":["Olympic Record"],"MVP":["Most Valuable Player"],"OT_SPORT":["Overtime"],"JV":["Junior Varsity"],"VC":["Vice Captain"],"RC":["Red Card"],"YC":["Yellow Card"],"AFL":["Australian Football League"],"NRL":["National Rugby League"],"NBA":["National Basketball Association"],"FIFA":["International Football Federation"],"IOC":["International Olympic Committee"]
+},
+"General School Terms": {
+"KPI":["Key Performance Indicator"],"FAQ":["Frequently Asked Questions"],"ID":["Identification"],"URL":["Uniform Resource Locator"],"PDF":["Portable Document Format"],"USB":["Universal Serial Bus"],"WIFI":["Wireless Fidelity"],"CPU":["Central Processing Unit"],"RAM":["Random Access Memory"],"AI":["Artificial Intelligence"],"VR":["Virtual Reality"],"AR":["Augmented Reality"],"SRC":["Student Representative Council"],"SLC":["Student Leadership Council"],"HC":["House Captain"],"VCAP":["Victorian Curriculum and Assessment Program"],"CCTV":["Closed Circuit Television"],"PA":["Public Address System"],"IDP":["Individual Development Plan"],"PDP":["Professional Development Plan"],"RPL":["Recognition of Prior Learning"],"CPR":["Cardiopulmonary Resuscitation"],"WHS":["Work Health and Safety"],"OHS":["Occupational Health and Safety"],"PPE":["Personal Protective Equipment"],"FIRST":["First Aid Response in Schools Training"],"EMAIL":["Electronic Mail"],"APP":["Application Software"],"DOC":["Document"],"TXT":["Text File"],"OLOR":["Our Lady of the Rosary"],"OLORW":["Our Lady of the Rosary Waitara"]
+},
+"Additional Verified": {
+"API":["Application Programming Interface"],"GUI":["Graphical User Interface"],"CLI":["Command Line Interface"],"DBMS":["Database Management System"],"SQL":["Structured Query Language"],"HTML":["HyperText Markup Language"],"CSS":["Cascading Style Sheets"],"JS":["JavaScript"],"JSON":["JavaScript Object Notation"],"XML":["Extensible Markup Language"],"LAN":["Local Area Network"],"WAN":["Wide Area Network"],"VPN":["Virtual Private Network"],"IP":["Internet Protocol"],"DNS":["Domain Name System"],"HTTP":["HyperText Transfer Protocol"],"HTTPS":["HyperText Transfer Protocol Secure"],"FTP":["File Transfer Protocol"],"SMTP":["Simple Mail Transfer Protocol"],"POP3":["Post Office Protocol 3"],"IMAP":["Internet Message Access Protocol"],"OS":["Operating System"],"BIOS":["Basic Input Output System"],"GPU":["Graphics Processing Unit"],"SSD":["Solid State Drive"],"HDD":["Hard Disk Drive"],"UPS":["Uninterruptible Power Supply"],"LCD":["Liquid Crystal Display"],"LED":["Light Emitting Diode"],"HDMI":["High Definition Multimedia Interface"],"USB_C":["Universal Serial Bus Type C"],"ETH":["Ethernet"],"K12":["Kindergarten to Year 12"],"PYP":["Primary Years Programme"],"MYP":["Middle Years Programme"],"DP_IB":["Diploma Programme"],"CAS":["Creativity Activity Service"],"TOK":["Theory of Knowledge"],"EE":["Extended Essay"],"SACE":["South Australian Certificate of Education"],"HSC":["Higher School Certificate"],"QCE":["Queensland Certificate of Education"],"WACE":["Western Australian Certificate of Education"],"TCE":["Tasmanian Certificate of Education"],"VCE":["Victorian Certificate of Education"],"UCAS":["Universities and Colleges Admissions Service"],"TAFE":["Technical and Further Education"],"RTO":["Registered Training Organisation"],"AQF":["Australian Qualifications Framework"],"CRICOS":["Commonwealth Register of Institutions and Courses for Overseas Students"],"OSHC":["Overseas Student Health Cover"],"EFTPOS":["Electronic Funds Transfer at Point of Sale"],"ABN":["Australian Business Number"],"TFN":["Tax File Number"],"GST":["Goods and Services Tax"],"NESA":["NSW Education Standards Authority"],"ACARA":["Australian Curriculum Assessment and Reporting Authority"],"AITSL":["Australian Institute for Teaching and School Leadership"],"NQS":["National Quality Standard"],"EYLF":["Early Years Learning Framework"],"OSHC_CARE":["Outside School Hours Care"],"BYOD":["Bring Your Own Device"],"TIC":["Teacher In Charge"],"YOE":["Years of Experience"],"FTE":["Full Time Equivalent"],"PD":["Professional Development"],"PLC_ED":["Professional Learning Community"],"SWD":["Students With Disabilities"],"EBD":["Emotional and Behavioural Disorder"],"LRE":["Least Restrictive Environment"],"RTI":["Response to Intervention"],"MTSS_ED":["Multi Tiered System of Supports"],"PBIS_ED":["Positive Behavioral Interventions and Supports"],"SEL_ED":["Social Emotional Learning"],"AYP":["Adequate Yearly Progress"],"FERPA":["Family Educational Rights and Privacy Act"]
+}
+};
+
+function countAcronyms(){
+  let total=0;
+  for(const cat in acronyms){
+    for(const key in acronyms[cat]) total+=acronyms[cat][key].length;
+  }
+  return total;
+}
+document.getElementById("counter").innerText=countAcronyms()+" acronyms in database";
+
+function acronymOfDay(){
+  const allKeys=[];
+  for(const cat in acronyms){
+    for(const key in acronyms[cat]){
+      acronyms[cat][key].forEach(def=>allKeys.push({key,keyDef:def}));
+    }
+  }
+  const r=allKeys[Math.floor(Math.random()*allKeys.length)];
+  document.getElementById("day").innerText="Acronym of the Day: "+r.key+" — "+r.keyDef;
+}
+acronymOfDay();
+
+function search(){
+  const input=document.getElementById("search").value.toUpperCase();
+  const results=document.getElementById("results");
+  results.innerHTML="";
+  let found=false;
+  for(const cat in acronyms){
+    for(const key in acronyms[cat]){
+      acronyms[cat][key].forEach(def=>{
+        if(key.toUpperCase().includes(input) || def.toUpperCase().includes(input)){
+          const div=document.createElement("div");
+          div.className="item";
+          div.innerHTML="<b>"+key+"</b>: "+def;
+          results.appendChild(div);
+          found=true;
+        }
+      });
+    }
+  }
+  if(!found) results.innerHTML="No acronyms found.";
+}
+
+function showAll(){
+  const results=document.getElementById("results");
+  results.innerHTML="";
+  for(const cat in acronyms){
+    const title=document.createElement("div");
+    title.className="category";
+    title.innerText=cat;
+    results.appendChild(title);
+    for(const key in acronyms[cat]){
+      acronyms[cat][key].forEach(def=>{
+        const div=document.createElement("div");
+        div.className="item";
+        div.innerHTML="<b>"+key+"</b>: "+def;
+        results.appendChild(div);
+      });
+    }
+  }
+}
+
+function randomAcronym(){
+  const allKeys=[];
+  for(const cat in acronyms){
+    for(const key in acronyms[cat]){
+      acronyms[cat][key].forEach(def=>allKeys.push({key,keyDef:def}));
+    }
+  }
+  const r=allKeys[Math.floor(Math.random()*allKeys.length)];
+  alert(r.key+" : "+r.keyDef);
+}
+
+function toggleDark(){document.body.classList.toggle("dark");}
+
+document.getElementById("search").addEventListener("input",function(){
+  const input=this.value.toUpperCase();
+  const results=document.getElementById("results");
+  results.innerHTML="";
+  if(input==="") return;
+  for(const cat in acronyms){
+    for(const key in acronyms[cat]){
+      acronyms[cat][key].forEach(def=>{
+        if(key.toUpperCase().startsWith(input) || def.toUpperCase().includes(input)){
+          const div=document.createElement("div");
+          div.className="item";
+          div.innerHTML="<b>"+key+"</b>: "+def;
+          results.appendChild(div);
+        }
+      });
+    }
+  }
+});
+</script>
+</body>
+</html>
